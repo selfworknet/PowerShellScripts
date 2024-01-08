@@ -12,7 +12,7 @@
     The new name of the file(s).
 
     .EXAMPLE
-    Rename-Files.ps1 -extension .jpg -baseName Vacation2023
+    Rename-Files.ps1 -extension ".jpg" -baseName "Vacation2023"
 #>
 
 param(
