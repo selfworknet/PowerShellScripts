@@ -15,8 +15,6 @@
     Rename-Files.ps1 -extension ".jpg" -baseName "Vacation2023"
 #>
 
-
-
 param(
     [Parameter(Mandatory)]
     # Extension (like .txt or .pdf etc)
@@ -37,7 +35,4 @@ foreach ($file in $files) {
     Rename-Item -NewName $newName -Path $file.FullName
 }
 
-Write-Host ("")
-Write-Host ("{0} files have been renamed." -f $count)
-Write-Host ("")
-
+Write-Host ("`n{0} files have been renamed.`n" -f $count)
