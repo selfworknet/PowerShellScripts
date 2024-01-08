@@ -1,18 +1,18 @@
 <#
     .SYNOPSIS
-    Renames multiple files of the given format type with the given name and increasing number.
+    Renames multiple files.
 
     .DESCRIPTION
     Renames multiple files of the given format type with the given name and increasing number.
 
     .PARAMETER suffix
-    Any kind of media format like *.txt, *.pdf, *.jpg and so on.
+    Any kind of media format like .txt, .pdf, .jpg and so on.
 
     .PARAMETER baseName
     The new name of the file(s).
 
     .EXAMPLE
-    Rename-Files.ps1 -extension ".jpg" -baseName "Vacation2023"
+    Rename-Files.ps1 -extension .jpg -baseName Vacation2023
 #>
 
 param(
