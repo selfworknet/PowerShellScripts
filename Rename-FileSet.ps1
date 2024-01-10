@@ -1,12 +1,12 @@
 <#
     .SYNOPSIS
-    Renames multiple files of the given format type with the given name and increasing number.
+    Renames multiple files.
 
     .DESCRIPTION
     Renames multiple files of the given format type with the given name and increasing number.
 
     .PARAMETER suffix
-    Any kind of media format like *.txt, *.pdf, *.jpg and so on.
+    Any kind of media format like .txt, .pdf, .jpg and so on.
 
     .PARAMETER baseName
     The new name of the file(s).
@@ -14,8 +14,6 @@
     .EXAMPLE
     Rename-Files.ps1 -extension ".jpg" -baseName "Vacation2023"
 #>
-
-
 
 param(
     [Parameter(Mandatory)]
@@ -37,7 +35,4 @@ foreach ($file in $files) {
     Rename-Item -NewName $newName -Path $file.FullName
 }
 
-Write-Host ("")
-Write-Host ("{0} files have been renamed." -f $count)
-Write-Host ("")
-
+Write-Host ("`n{0} files have been renamed.`n" -f $count)
