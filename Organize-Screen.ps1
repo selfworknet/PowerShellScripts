@@ -73,20 +73,20 @@ $screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
 $halfWidth = [math]::Floor($screenWidth / 2)
 $halfHeight = [math]::Floor($screenHeight / 2)
 
-# Sets windows in normal mode if they're maximized
+# Sets windows in normal mode if they're maximized (with hardcoded modifiers to close all gaps)
 if ($firefoxHandle -ne [IntPtr]::Zero) {
     [WindowManager]::ShowWindow($firefoxHandle, [WindowManager]::SW_RESTORE)
-    [WindowManager]::SetWindowPos($firefoxHandle, [IntPtr]::Zero, 0, 0, $halfWidth, $halfHeight, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
+    [WindowManager]::SetWindowPos($firefoxHandle, [IntPtr]::Zero, - 4, 0, $halfWidth + 8, $halfHeight + 4, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
 }
 
 if ($chromeHandle -ne [IntPtr]::Zero) {
     [WindowManager]::ShowWindow($chromeHandle, [WindowManager]::SW_RESTORE)
-    [WindowManager]::SetWindowPos($chromeHandle, [IntPtr]::Zero, 0, $halfHeight, $halfWidth, $halfHeight, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
+    [WindowManager]::SetWindowPos($chromeHandle, [IntPtr]::Zero, - 6, $halfHeight - 4, $halfWidth + 12, $halfHeight - 30, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
 }
 
 if ($vscodiumHandle -ne [IntPtr]::Zero) {
     [WindowManager]::ShowWindow($vscodiumHandle, [WindowManager]::SW_RESTORE)
-    [WindowManager]::SetWindowPos($vscodiumHandle, [IntPtr]::Zero, $halfWidth, 0, $halfWidth, $screenHeight, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
+    [WindowManager]::SetWindowPos($vscodiumHandle, [IntPtr]::Zero, $halfWidth - 2, 0, $halfWidth, $screenHeight - 40, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
 }
 
 # Completion message
