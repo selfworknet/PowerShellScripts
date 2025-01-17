@@ -6,6 +6,7 @@ param(
 [String]$algo  # $algo = Algorithm  
 )
 
+# Font threepoint --> http://www.network-science.de/ascii/
 function Title() {
 "
 (~ _ _|_  |_| _  _|_ 
