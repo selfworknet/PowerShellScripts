@@ -22,20 +22,17 @@ function Title() {
 "
 }
 
-
-
 $filehash = Get-FileHash $path -Algorithm $algo
-
 
 function Print() {
     
     Clear-Host
     Title
     Write-Host "Calculated hash: " 
-    Write-Host $filehash.Hash
+    Write-Host $filehash.Hash.ToLower()
     Write-Host ("  ------------  ")
     Write-Host "Source hash: " 
-    Write-Host $origin
+    Write-Host $origin.ToLower()
 }
 
 if ($filehash.Hash -eq $origin) {
