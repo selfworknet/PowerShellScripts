@@ -1,40 +1,32 @@
-﻿# Funktionen für das Fenster-Management
-Add-Type @"
-using System;
-using System.Runtime.InteropServices;
+﻿function StartOrFocusApp {
+    param (
+        [string]$processName,
+        [string]$exePath
+    )
+    # Prüfen, ob der Prozess läuft
+    $runningProcess = Get-Process -Name $processName -ErrorAction SilentlyContinue
 
-public class WindowManager {
-    [DllImport("user32.dll", SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-    [DllImport("user32.dll", SetLastError = true)]
-    public static extern bool IsWindowVisible(IntPtr hWnd);
-
-    public const uint SWP_NOZORDER = 0x0004;
-    public const uint SWP_SHOWWINDOW = 0x0040;
-    public const int SW_RESTORE = 9;
+    if ($null -eq $runningProcess) {
+        # Programm starten, wenn nicht geöffnet
+        Start-Process $exePath
+        Write-Host "$processName gestartet."
+    } else {
+        Write-Host "$processName läuft bereits."
+    }
 }
-"@
 
-# Programme starten
-Start-Process "C:\Program Files\Mozilla Firefox\firefox.exe"
-Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe"
-Start-Process "C:\Program Files\VSCodium\VSCodium.exe"
+# Programme starten oder fokussieren
+StartOrFocusApp -processName "firefox" -exePath "C:\Program Files\Mozilla Firefox\firefox.exe"
+StartOrFocusApp -processName "chrome" -exePath "C:\Program Files\Google\Chrome\Application\chrome.exe"
+StartOrFocusApp -processName "Code" -exePath "C:\Program Files\VSCodium\VSCodium.exe"
 
-# Warten, damit die Fenster Zeit haben, sich zu öffnen
+# Warten, damit Fenster sicher geladen sind
 Start-Sleep -Seconds 5
 
-# Fenster-Handle abrufen
+# Fenster-Handles wie zuvor abrufen und verschieben
 $firefoxHandle = [WindowManager]::FindWindow($null, "Mozilla Firefox")
 $chromeHandle = [WindowManager]::FindWindow($null, "Google Chrome")
-$vscodiumHandle = [WindowManager]::FindWindow($null, "VSCodium")
+$vsCodiumHandle = [WindowManager]::FindWindow($null, "Visual Studio Code")
 
 # Bildschirmgröße abrufen
 $screenWidth = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Width
@@ -44,16 +36,12 @@ $screenHeight = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds.Height
 $halfWidth = [math]::Floor($screenWidth / 2)
 $halfHeight = [math]::Floor($screenHeight / 2)
 
-# Firefox: links oben
+# Fenster positionieren
 [WindowManager]::SetWindowPos($firefoxHandle, [IntPtr]::Zero, 0, 0, $halfWidth, $halfHeight, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
-
-# Chrome: links unten
 [WindowManager]::SetWindowPos($chromeHandle, [IntPtr]::Zero, 0, $halfHeight, $halfWidth, $halfHeight, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
-
-# VS Code: rechts (ganze Höhe)
-[WindowManager]::SetWindowPos($vscodiumHandle, [IntPtr]::Zero, $halfWidth, 0, $halfWidth, $screenHeight, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
+[WindowManager]::SetWindowPos($vsCodiumHandle, [IntPtr]::Zero, $halfWidth, 0, $halfWidth, $screenHeight, [WindowManager]::SWP_NOZORDER -bor [WindowManager]::SWP_SHOWWINDOW)
 
 # Fenster in den Vordergrund holen
 [WindowManager]::ShowWindow($firefoxHandle, [WindowManager]::SW_RESTORE)
 [WindowManager]::ShowWindow($chromeHandle, [WindowManager]::SW_RESTORE)
-[WindowManager]::ShowWindow($vscodiumHandle, [WindowManager]::SW_RESTORE)
+[WindowManager]::ShowWindow($vsCodiumHandle, [WindowManager]::SW_RESTORE)
